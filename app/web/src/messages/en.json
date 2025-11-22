@@ -1,0 +1,48 @@
+{
+    "Sidebar": {
+        "addContent": "Add Content",
+        "search": "Search",
+        "history": "History",
+        "spaces": "Spaces",
+        "createSpace": "Create Space",
+        "recentActivity": "Recent Activity",
+        "help": "Help & Tools",
+        "feedback": "Feedback",
+        "guide": "Quick Guide",
+        "upgrade": "Upgrade"
+    },
+    "Dashboard": {
+        "greeting": "What do you want to learn?",
+        "upload": "Upload",
+        "uploadDesc": "Files, Audio, Video",
+        "paste": "Paste",
+        "pasteDesc": "YouTube, Website, Text",
+        "record": "Record",
+        "recordDesc": "Record Class, Video Call",
+        "searchPlaceholder": "Learn anything...",
+        "mySpaces": "My Spaces",
+        "createSpace": "Create Space",
+        "continueLearning": "Continue Learning",
+        "viewAll": "View All"
+    },
+    "AIAssistant": {
+        "tabs": {
+            "chat": "Chat",
+            "flashcards": "Flashcards",
+            "quiz": "Quiz",
+            "podcast": "Podcast",
+            "summary": "Summary",
+            "explanation": "Explanation"
+        },
+        "actions": {
+            "quizMe": "Quiz Me",
+            "mindMap": "Mind Map",
+            "voiceMode": "Voice Mode",
+            "flashcards": "Flashcards",
+            "search": "Search",
+            "timeline": "Timeline",
+            "learnAnything": "Learn anything"
+        },
+        "greeting": "Learn with AI Tutor"
+    }
+}

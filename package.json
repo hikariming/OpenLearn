@@ -1,0 +1,9 @@
+{
+	"scripts": {
+		"dev": "concurrently \"pnpm --filter openlearn dev\" \"pnpm --filter server start:dev\""
+	},
+	"devDependencies": {
+		"@nestjs/cli": "^11.0.12",
+		"concurrently": "^9.2.1"
+	}
+}

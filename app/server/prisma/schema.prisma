@@ -1,0 +1,87 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User (Account)
+model User {
+  id                String    @id @default(uuid())
+  email             String    @unique
+  name              String
+  password          String?   // Nullable for SSO users
+  passwordSalt      String?   @map("password_salt")
+  avatar            String?
+  interfaceLanguage String?   @map("interface_language")
+  timezone          String?
+  lastLoginAt       DateTime? @map("last_login_at")
+  lastLoginIp       String?   @map("last_login_ip")
+  status            String    @default("active") // active, banned, closed
+  createdAt         DateTime  @default(now()) @map("created_at")
+  updatedAt         DateTime  @updatedAt @map("updated_at")
+
+  // Relationships
+  tenants           TenantMember[]
+  ownedTenants      Tenant[]       @relation("TenantOwner")
+  accounts          Account[]      // SSO Accounts
+
+  @@map("users")
+}
+
+// Tenant (Workspace)
+model Tenant {
+  id               String   @id @default(uuid())
+  name             String
+  plan             String   @default("basic")
+  status           String   @default("normal")
+  encryptPublicKey String?  @map("encrypt_public_key")
+  customConfig     String?  @map("custom_config") // JSON string
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+
+  // Relationships
+  members          TenantMember[]
+  ownerId          String?        @map("owner_id") // Optional owner reference
+  owner            User?          @relation("TenantOwner", fields: [ownerId], references: [id])
+
+  @@map("tenants")
+}
+
+// TenantMember (TenantAccountJoin)
+model TenantMember {
+  id        String   @id @default(uuid())
+  tenantId  String   @map("tenant_id")
+  userId    String   @map("user_id")
+  role      String   @default("normal") // owner, admin, editor, normal
+  current   Boolean  @default(false)    // Is this the currently active tenant for the user?
+  invitedBy String?  @map("invited_by")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relationships
+  tenant    Tenant   @relation(fields: [tenantId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@unique([tenantId, userId])
+  @@map("tenant_members")
+}
+
+// Account (SSO Integration - AccountIntegrate)
+model Account {
+  id             String   @id @default(uuid())
+  userId         String   @map("user_id")
+  provider       String
+  providerAccountId String @map("provider_account_id") // open_id
+  encryptedToken String   @map("encrypted_token")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  // Relationships
+  user           User     @relation(fields: [userId], references: [id])
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}

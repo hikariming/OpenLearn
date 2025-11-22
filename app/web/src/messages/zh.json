@@ -1,0 +1,48 @@
+{
+    "Sidebar": {
+        "addContent": "添加内容",
+        "search": "搜索",
+        "history": "历史",
+        "spaces": "空间",
+        "createSpace": "创造空间",
+        "recentActivity": "近期活动",
+        "help": "帮助与工具",
+        "feedback": "反馈意见",
+        "guide": "快读指南",
+        "upgrade": "升级"
+    },
+    "Dashboard": {
+        "greeting": "你想学什么？",
+        "upload": "上传",
+        "uploadDesc": "文件、音频、视频",
+        "paste": "粘贴",
+        "pasteDesc": "YouTube、网站、文本",
+        "record": "记录",
+        "recordDesc": "录制课堂、视频通话",
+        "searchPlaceholder": "学习任何东西",
+        "mySpaces": "我的空间",
+        "createSpace": "创建空间",
+        "continueLearning": "继续学习",
+        "viewAll": "查看全部"
+    },
+    "AIAssistant": {
+        "tabs": {
+            "chat": "聊天",
+            "flashcards": "抽认卡",
+            "quiz": "测验",
+            "podcast": "播客",
+            "summary": "摘要",
+            "explanation": "说明"
+        },
+        "actions": {
+            "quizMe": "小测验",
+            "mindMap": "思维导图",
+            "voiceMode": "语音模式",
+            "flashcards": "抽认卡",
+            "search": "搜索",
+            "timeline": "时间表",
+            "learnAnything": "学习任何东西"
+        },
+        "greeting": "与人工智能辅导员一起学习"
+    }
+}

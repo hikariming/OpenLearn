@@ -1,0 +1,48 @@
+{
+    "Sidebar": {
+        "addContent": "コンテンツを追加",
+        "search": "検索",
+        "history": "履歴",
+        "spaces": "スペース",
+        "createSpace": "スペースを作成",
+        "recentActivity": "最近のアクティビティ",
+        "help": "ヘルプとツール",
+        "feedback": "フィードバック",
+        "guide": "クイックガイド",
+        "upgrade": "アップグレード"
+    },
+    "Dashboard": {
+        "greeting": "何を学びたいですか？",
+        "upload": "アップロード",
+        "uploadDesc": "ファイル、音声、動画",
+        "paste": "貼り付け",
+        "pasteDesc": "YouTube、ウェブサイト、テキスト",
+        "record": "録画",
+        "recordDesc": "授業を録画、ビデオ通話",
+        "searchPlaceholder": "何でも学ぶ...",
+        "mySpaces": "マイスペース",
+        "createSpace": "スペースを作成",
+        "continueLearning": "学習を続ける",
+        "viewAll": "すべて表示"
+    },
+    "AIAssistant": {
+        "tabs": {
+            "chat": "チャット",
+            "flashcards": "暗記カード",
+            "quiz": "クイズ",
+            "podcast": "ポッドキャスト",
+            "summary": "要約",
+            "explanation": "解説"
+        },
+        "actions": {
+            "quizMe": "クイズ",
+            "mindMap": "マインドマップ",
+            "voiceMode": "音声モード",
+            "flashcards": "暗記カード",
+            "search": "検索",
+            "timeline": "タイムライン",
+            "learnAnything": "何でも学ぶ"
+        },
+        "greeting": "AIチューターと一緒に学ぶ"
+    }
+}
