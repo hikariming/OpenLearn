@@ -2,7 +2,6 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
-import Sidebar from '@/components/Sidebar';
 import "../globals.css";
 import { AuthProvider } from "@/context/AuthContext";
 
@@ -26,10 +25,7 @@ export default async function LocaleLayout({
 
   return (
     <NextIntlClientProvider messages={messages}>
-      <Sidebar />
-      <main className="flex-1 overflow-auto p-8">
-        {children}
-      </main>
+      {children}
     </NextIntlClientProvider>
   );
 }

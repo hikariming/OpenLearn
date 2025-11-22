@@ -32,6 +32,14 @@ export function middleware(request: NextRequest) {
         return NextResponse.redirect(new URL(`/${locale}/dashboard`, request.url));
     }
 
+    // Redirect logged-in users from landing page to dashboard
+    const isLandingPage = /^\/(en|zh|ja)\/?$/.test(pathname);
+    if (isLandingPage && token) {
+        console.log(`[Middleware] Redirecting authed from landing to dashboard`);
+        const locale = pathname.split('/')[1];
+        return NextResponse.redirect(new URL(`/${locale}/dashboard`, request.url));
+    }
+
     console.log(`[Middleware] Passing to intlMiddleware`);
     const response = intlMiddleware(request);
     console.log(`[Middleware] Intl response status: ${response.status}`);

@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import api from '@/lib/api';
 
 interface User {
@@ -25,6 +25,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
     const router = useRouter();
+    const pathname = usePathname();
+
+    // 从当前路径提取 locale (例如 /en/dashboard -> en)
+    const getLocaleFromPath = () => {
+        const match = pathname?.match(/^\/(en|zh|ja)/);
+        return match ? match[1] : 'en'; // 默认使用 en
+    };
 
     useEffect(() => {
         const initializeAuth = async () => {
@@ -58,14 +65,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         Cookies.set('token', token, { expires: 7 }); // 7 days
         localStorage.setItem('user', JSON.stringify(userData));
         setUser(userData);
-        router.push('/dashboard');
+        const locale = getLocaleFromPath();
+        router.push(`/${locale}/dashboard`);
     };
 
     const logout = () => {
         Cookies.remove('token');
         localStorage.removeItem('user');
         setUser(null);
-        router.push('/login');
+        const locale = getLocaleFromPath();
+        router.push(`/${locale}/login`);
     };
 
     return (
