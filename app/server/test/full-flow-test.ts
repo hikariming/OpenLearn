@@ -33,8 +33,15 @@ async function bootstrap() {
 
         // 2. Login
         console.log('\n2. Logging in...');
-        const loginResult = await authService.login({ email, password });
+        const loginResult = await authService.login({
+            email,
+            password: 'password123',
+        });
         console.log('   > Login Success. User:', loginResult.user.email);
+        console.log('   > Token:', loginResult.token ? 'Generated ✅' : 'Missing ❌');
+        if (loginResult.token) {
+            console.log('   > Token Preview:', loginResult.token.substring(0, 20) + '...');
+        }
 
         // 3. Create Second Tenant
         console.log('\n3. Creating Second Tenant...');
