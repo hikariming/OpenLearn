@@ -1,0 +1,93 @@
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { UserService } from '../user/user.service';
+import { TenantService } from '../tenant/tenant.service';
+import { PrismaService } from '../../prisma/prisma.service';
+import * as bcrypt from 'bcrypt';
+import { RegisterDto } from './dto/register.dto';
+import { LoginDto } from './dto/login.dto';
+
+@Injectable()
+export class AuthService {
+    constructor(
+        private userService: UserService,
+        private tenantService: TenantService,
+        private prisma: PrismaService,
+    ) { }
+
+    async register(registerDto: RegisterDto) {
+        const { email, password, name } = registerDto;
+
+        // 1. Check if user exists
+        const existingUser = await this.userService.user({ email });
+        if (existingUser) {
+            throw new Error('User already exists');
+        }
+
+        // 2. Hash password
+        const salt = await bcrypt.genSalt();
+        const hashedPassword = await bcrypt.hash(password, salt);
+
+        // 3. Transaction: Create User -> Create Tenant -> Link
+        return this.prisma.$transaction(async (tx) => {
+            // Create User
+            const user = await tx.user.create({
+                data: {
+                    email,
+                    name,
+                    password: hashedPassword,
+                    passwordSalt: salt,
+                    status: 'active',
+                },
+            });
+
+            // Create Default Tenant
+            const tenant = await tx.tenant.create({
+                data: {
+                    name: `${name}'s Workspace`,
+                    plan: 'basic',
+                    status: 'normal',
+                    ownerId: user.id,
+                },
+            });
+
+            // Link User to Tenant as Owner
+            await tx.tenantMember.create({
+                data: {
+                    userId: user.id,
+                    tenantId: tenant.id,
+                    role: 'owner',
+                    current: true,
+                },
+            });
+
+            return {
+                user,
+                tenant,
+            };
+        });
+    }
+
+    async login(loginDto: LoginDto) {
+        const { email, password } = loginDto;
+        const user = await this.userService.user({ email });
+
+        if (!user || !user.password) {
+            throw new UnauthorizedException('Invalid credentials');
+        }
+
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            throw new UnauthorizedException('Invalid credentials');
+        }
+
+        // TODO: Generate JWT
+        return {
+            message: 'Login successful',
+            user: {
+                id: user.id,
+                email: user.email,
+                name: user.name,
+            },
+        };
+    }
+}

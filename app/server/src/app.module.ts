@@ -4,6 +4,10 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import configuration from './common/config/configuration';
 import { validationSchema } from './common/config/validation.schema';
+import { PrismaModule } from './prisma/prisma.module';
+import { UserModule } from './modules/user/user.module';
+import { TenantModule } from './modules/tenant/tenant.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -12,6 +16,10 @@ import { validationSchema } from './common/config/validation.schema';
       load: [configuration],
       validationSchema: validationSchema,
     }),
+    PrismaModule,
+    UserModule,
+    TenantModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
