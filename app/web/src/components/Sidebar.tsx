@@ -28,9 +28,9 @@ export default function Sidebar() {
     };
 
     return (
-        <div className="w-64 h-full border-r border-gray-100 flex flex-col bg-white">
+        <div className="w-64 h-screen shrink-0 border-r border-gray-100 flex flex-col bg-white">
             {/* Header */}
-            <div className="p-4 flex items-center justify-between">
+            <div className="p-4 flex items-center justify-between shrink-0">
                 <div className="flex items-center gap-2 font-bold text-xl">
                     <div className="w-6 h-6 bg-black rounded-sm"></div>
                     <span>OpenLearn</span>
@@ -41,7 +41,7 @@ export default function Sidebar() {
             </div>
 
             {/* Main Navigation */}
-            <div className="flex-1 overflow-y-auto py-2">
+            <div className="flex-1 overflow-y-auto py-2 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent hover:scrollbar-thumb-gray-400">
                 <div className="px-4 mb-6">
                     <button className="flex items-center gap-3 text-gray-600 hover:bg-gray-50 w-full p-2 rounded-lg transition-colors">
                         <Plus size={20} />
@@ -112,7 +112,7 @@ export default function Sidebar() {
             </div>
 
             {/* Footer */}
-            <div className="p-4 border-t border-gray-100">
+            <div className="p-4 border-t border-gray-100 shrink-0">
                 <div className="bg-green-50 text-green-700 text-xs font-medium py-1 px-2 rounded mb-3 text-center">
                     Free 计划
                 </div>
