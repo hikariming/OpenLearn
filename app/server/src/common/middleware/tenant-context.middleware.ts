@@ -18,7 +18,8 @@ export class TenantContextMiddleware implements NestMiddleware {
     constructor(private prisma: PrismaService) { }
 
     async use(req: Request, res: Response, next: NextFunction) {
-        const userId = req['user']?.id; // 从 JWT 认证中间件获取
+        const request = req as any;
+        const userId = request.user?.id; // 从 JWT 认证中间件获取
 
         if (!userId) {
             // 未认证用户，跳过租户上下文设置
@@ -39,9 +40,9 @@ export class TenantContextMiddleware implements NestMiddleware {
 
             if (currentMembership) {
                 // 注入租户信息到请求上下文
-                req['currentTenant'] = currentMembership.tenant;
-                req['currentTenantId'] = currentMembership.tenantId;
-                req['currentRole'] = currentMembership.role;
+                request.currentTenant = currentMembership.tenant;
+                request.currentTenantId = currentMembership.tenantId;
+                request.currentRole = currentMembership.role;
 
                 this.logger.debug(
                     `User ${userId} accessing with tenant ${currentMembership.tenantId} (${currentMembership.role})`,

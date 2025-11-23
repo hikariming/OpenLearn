@@ -46,6 +46,8 @@ model Tenant {
   members          TenantMember[]
   ownerId          String?        @map("owner_id") // Optional owner reference
   owner            User?          @relation("TenantOwner", fields: [ownerId], references: [id])
+  providerConfigs  ProviderConfig[]
+  modelSettings    TenantModelSetting[]
 
   @@map("tenants")
 }
@@ -84,4 +86,37 @@ model Account {
 
   @@unique([provider, providerAccountId])
   @@map("accounts")
+}
+
+// Model Provider Configuration
+model ProviderConfig {
+  id              String   @id @default(uuid())
+  tenantId        String   @map("tenant_id")
+  provider        String   // e.g., 'openai', 'openrouter'
+  encryptedConfig String   @map("encrypted_config") // Encrypted JSON: { "api_key": "..." }
+  isValid         Boolean  @default(false) @map("is_valid")
+  lastValidatedAt DateTime? @map("last_validated_at")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  tenant          Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, provider])
+  @@map("provider_configs")
+}
+
+// Tenant Model Settings (Default models)
+model TenantModelSetting {
+  id             String   @id @default(uuid())
+  tenantId       String   @map("tenant_id")
+  modelType      String   @map("model_type") // 'llm', 'embedding', 'rerank', 'tts', 'speech_to_text'
+  provider       String   // The provider name, e.g., 'openai'
+  model          String   // The model ID, e.g., 'gpt-4-turbo'
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  tenant         Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, modelType])
+  @@map("tenant_model_settings")
 }

@@ -8,6 +8,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { UserModule } from './modules/user/user.module';
 import { TenantModule } from './modules/tenant/tenant.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { ModelProviderModule } from './modules/model-provider/model-provider.module';
 import { TenantContextMiddleware } from './common/middleware/tenant-context.middleware';
 
 @Module({
@@ -21,6 +22,7 @@ import { TenantContextMiddleware } from './common/middleware/tenant-context.midd
     UserModule,
     TenantModule,
     AuthModule,
+    ModelProviderModule,
   ],
   controllers: [AppController],
   providers: [AppService],

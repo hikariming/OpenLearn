@@ -67,6 +67,37 @@
         "updateSuccess": "更新成功",
         "updateError": "更新失败",
         "passwordMismatch": "密码不匹配",
-        "passwordTooShort": "密码至少需要6个字符"
+        "passwordTooShort": "密码至少需要6个字符",
+        "modelProvider": "模型提供商"
+    },
+    "ModelProvider": {
+        "providers": "模型提供商",
+        "addProvider": "添加提供商",
+        "providerType": "提供商类型",
+        "baseUrl": "API 基础地址",
+        "optional": "可选",
+        "saving": "保存中...",
+        "save": "保存",
+        "cancel": "取消",
+        "loading": "加载中...",
+        "noProviders": "暂无配置的提供商",
+        "delete": "删除",
+        "confirmDelete": "确定要删除此提供商吗？",
+        "defaultModels": "默认模型",
+        "selectModel": "选择模型",
+        "fetchError": "获取数据失败",
+        "saveSuccess": "提供商保存成功",
+        "saveError": "保存提供商失败",
+        "deleteSuccess": "提供商删除成功",
+        "deleteError": "删除提供商失败",
+        "settingUpdateSuccess": "默认模型已更新",
+        "settingUpdateError": "更新默认模型失败",
+        "modelType": {
+            "llm": "LLM (文本生成)",
+            "embedding": "文本嵌入 (Embedding)",
+            "rerank": "重排序 (Rerank)",
+            "tts": "文本转语音 (TTS)",
+            "speech": "语音转文本 (ASR)"
+        }
     }
 }

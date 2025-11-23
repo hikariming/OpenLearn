@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { X } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import api from '@/lib/api';
+import ModelProviderSettings from './settings/ModelProviderSettings';
 
 interface SettingsModalProps {
     isOpen: boolean;
@@ -18,7 +19,7 @@ interface SettingsModalProps {
 export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
     const t = useTranslations('Settings');
     const { user, logout } = useAuth();
-    const [activeTab, setActiveTab] = useState<'info' | 'password'>('info');
+    const [activeTab, setActiveTab] = useState<'info' | 'password' | 'modelProvider'>('info');
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
@@ -49,7 +50,7 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
             setTimeout(() => {
                 window.location.reload();
             }, 1000);
-        } catch (error: any) {
+        } catch (error: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
             setMessage({ type: 'error', text: error.response?.data?.message || t('updateError') });
         } finally {
             setLoading(false);
@@ -117,8 +118,8 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
                         <button
                             onClick={() => setActiveTab('info')}
                             className={`w-full text-left px-4 py-3 rounded-lg transition-colors ${activeTab === 'info'
-                                    ? 'bg-white text-gray-900 font-medium shadow-sm'
-                                    : 'text-gray-600 hover:bg-white hover:text-gray-900'
+                                ? 'bg-white text-gray-900 font-medium shadow-sm'
+                                : 'text-gray-600 hover:bg-white hover:text-gray-900'
                                 }`}
                         >
                             {t('personalInfo')}
@@ -126,11 +127,20 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
                         <button
                             onClick={() => setActiveTab('password')}
                             className={`w-full text-left px-4 py-3 rounded-lg transition-colors ${activeTab === 'password'
-                                    ? 'bg-white text-gray-900 font-medium shadow-sm'
-                                    : 'text-gray-600 hover:bg-white hover:text-gray-900'
+                                ? 'bg-white text-gray-900 font-medium shadow-sm'
+                                : 'text-gray-600 hover:bg-white hover:text-gray-900'
                                 }`}
                         >
                             {t('changePassword')}
+                        </button>
+                        <button
+                            onClick={() => setActiveTab('modelProvider')}
+                            className={`w-full text-left px-4 py-3 rounded-lg transition-colors ${activeTab === 'modelProvider'
+                                ? 'bg-white text-gray-900 font-medium shadow-sm'
+                                : 'text-gray-600 hover:bg-white hover:text-gray-900'
+                                }`}
+                        >
+                            {t('modelProvider')}
                         </button>
                     </nav>
                 </div>
@@ -140,8 +150,8 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
                     {message && (
                         <div
                             className={`mb-6 p-4 rounded-lg ${message.type === 'success'
-                                    ? 'bg-green-50 text-green-700 border border-green-200'
-                                    : 'bg-red-50 text-red-700 border border-red-200'
+                                ? 'bg-green-50 text-green-700 border border-green-200'
+                                : 'bg-red-50 text-red-700 border border-red-200'
                                 }`}
                         >
                             {message.text}
@@ -260,6 +270,13 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
                                     </button>
                                 </div>
                             </form>
+                        </div>
+                    )}
+
+                    {activeTab === 'modelProvider' && (
+                        <div>
+                            <h3 className="text-2xl font-bold text-gray-900 mb-6">{t('modelProvider')}</h3>
+                            <ModelProviderSettings />
                         </div>
                     )}
                 </div>

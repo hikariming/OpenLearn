@@ -34,7 +34,7 @@ export class TenantController {
      * 获取用户的所有租户
      */
     @Get()
-    async getUserTenants(@Request() req) {
+    async getUserTenants(@Request() req: any) {
         return this.tenantService.getUserTenants(req.user.id);
     }
 
@@ -42,7 +42,7 @@ export class TenantController {
      * 获取当前激活的租户
      */
     @Get('current')
-    async getCurrentTenant(@Request() req) {
+    async getCurrentTenant(@Request() req: any) {
         const tenant = await this.tenantService.getCurrentTenant(req.user.id);
         if (!tenant) {
             return { message: '未选择空间' };
@@ -54,7 +54,7 @@ export class TenantController {
      * 创建新租户
      */
     @Post()
-    async createTenant(@Request() req, @Body() createTenantDto: CreateTenantDto) {
+    async createTenant(@Request() req: any, @Body() createTenantDto: CreateTenantDto) {
         return this.tenantService.createTenant(req.user.id, createTenantDto.name);
     }
 
@@ -95,7 +95,7 @@ export class TenantController {
      * 切换当前租户
      */
     @Post(':id/switch')
-    async switchTenant(@Request() req, @Param('id') id: string) {
+    async switchTenant(@Request() req: any, @Param('id') id: string) {
         await this.tenantService.switchTenant(req.user.id, id);
         const tenant = await this.tenantService.tenant({ id });
         return {
@@ -120,7 +120,7 @@ export class TenantController {
     @UseGuards(TenantAccessGuard, TenantRoleGuard)
     @Roles('admin')
     async inviteMember(
-        @Request() req,
+        @Request() req: any,
         @Param('id') id: string,
         @Body() inviteMemberDto: InviteMemberDto,
     ) {
