@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useAuth } from './AuthContext';
+import api from '@/lib/api';
 
 /**
  * 租户（空间）接口定义
@@ -24,6 +25,7 @@ interface TenantContextType {
     currentTenant: Tenant | null;
     tenants: Tenant[];
     loading: boolean;
+    switching: boolean;
     switchTenant: (tenantId: string) => Promise<void>;
     refreshTenants: () => Promise<void>;
     createTenant: (name: string) => Promise<Tenant>;
@@ -40,6 +42,7 @@ export function TenantProvider({ children }: { children: ReactNode }) {
     const [currentTenant, setCurrentTenant] = useState<Tenant | null>(null);
     const [tenants, setTenants] = useState<Tenant[]>([]);
     const [loading, setLoading] = useState(true);
+    const [switching, setSwitching] = useState(false);
 
     /**
      * 刷新租户列表
@@ -53,17 +56,7 @@ export function TenantProvider({ children }: { children: ReactNode }) {
         }
 
         try {
-            const response = await fetch('http://localhost:3001/tenants', {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                },
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to fetch tenants');
-            }
-
-            const data = await response.json();
+            const { data } = await api.get('/tenants');
             setTenants(data);
 
             // 找到当前激活的租户
@@ -84,23 +77,16 @@ export function TenantProvider({ children }: { children: ReactNode }) {
     const switchTenant = async (tenantId: string) => {
         if (!token) return;
 
+        setSwitching(true);
         try {
-            const response = await fetch(`http://localhost:3001/tenants/${tenantId}/switch`, {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                },
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to switch tenant');
-            }
-
+            await api.post(`/tenants/${tenantId}/switch`);
             // 刷新租户列表
             await refreshTenants();
         } catch (error) {
             console.error('Failed to switch tenant:', error);
             throw error;
+        } finally {
+            setSwitching(false);
         }
     };
 
@@ -113,25 +99,10 @@ export function TenantProvider({ children }: { children: ReactNode }) {
         }
 
         try {
-            const response = await fetch('http://localhost:3001/tenants', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
-                },
-                body: JSON.stringify({ name }),
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to create tenant');
-            }
-
-            const newTenant = await response.json();
-
+            const { data } = await api.post('/tenants', { name });
             // 刷新租户列表
             await refreshTenants();
-
-            return newTenant;
+            return data;
         } catch (error) {
             console.error('Failed to create tenant:', error);
             throw error;
@@ -149,6 +120,7 @@ export function TenantProvider({ children }: { children: ReactNode }) {
                 currentTenant,
                 tenants,
                 loading,
+                switching,
                 switchTenant,
                 refreshTenants,
                 createTenant,

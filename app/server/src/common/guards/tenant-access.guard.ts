@@ -22,14 +22,31 @@ export class TenantAccessGuard implements CanActivate {
 
     constructor(private prisma: PrismaService) { }
 
-    async canActivate(context: ExecutionContext): boolean {
+    async canActivate(context: ExecutionContext): Promise<boolean> {
         const request = context.switchToHttp().getRequest();
         const userId = request.user?.id;
-        const tenantId = request.currentTenantId;
+        let tenantId = request.currentTenantId;
 
         // 检查用户和租户上下文
         if (!userId) {
             throw new ForbiddenException('用户未认证');
+        }
+
+        // 如果中间件未能设置租户上下文（因为中间件在 AuthGuard 之前运行），尝试在此处加载
+        if (!tenantId) {
+            const currentMembership = await this.prisma.tenantMember.findFirst({
+                where: {
+                    userId,
+                    current: true,
+                },
+            });
+
+            if (currentMembership) {
+                tenantId = currentMembership.tenantId;
+                // 补全 request 上下文
+                request.currentTenantId = tenantId;
+                request.currentRole = currentMembership.role;
+            }
         }
 
         if (!tenantId) {

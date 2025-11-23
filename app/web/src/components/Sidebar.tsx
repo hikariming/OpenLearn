@@ -30,7 +30,7 @@ export default function Sidebar() {
     const router = useRouter();
     const pathname = usePathname();
     const { user, logout } = useAuth();
-    const { currentTenant, tenants, loading, switchTenant } = useTenant();
+    const { currentTenant, tenants, loading, switching, switchTenant } = useTenant();
 
     const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
     const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
@@ -113,10 +113,11 @@ export default function Sidebar() {
                             <button
                                 onClick={() => setIsSpaceMenuOpen(!isSpaceMenuOpen)}
                                 className="flex items-center gap-3 text-gray-600 hover:bg-gray-50 w-full p-2 rounded-lg transition-colors"
+                                disabled={switching}
                             >
                                 <Box size={20} />
                                 <span className="flex-1 text-left truncate">
-                                    {currentTenant.name}
+                                    {switching ? 'Switching...' : currentTenant.name}
                                 </span>
                                 <ChevronDown size={16} className={`transition-transform ${isSpaceMenuOpen ? 'rotate-180' : ''}`} />
                             </button>
@@ -130,6 +131,7 @@ export default function Sidebar() {
                                                 key={tenant.id}
                                                 onClick={() => handleSwitchTenant(tenant.id)}
                                                 className="flex items-center gap-3 w-full text-left px-3 py-2 hover:bg-gray-50 text-sm rounded transition-colors"
+                                                disabled={switching}
                                             >
                                                 <Box size={16} />
                                                 <span className="flex-1 truncate">{tenant.name}</span>
