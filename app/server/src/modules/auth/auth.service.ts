@@ -105,4 +105,69 @@ export class AuthService {
             token,
         };
     }
+
+    /**
+     * 获取用户信息
+     */
+    async getProfile(userId: string) {
+        const user = await this.userService.user({ id: userId });
+        if (!user) {
+            throw new UnauthorizedException('User not found');
+        }
+
+        return {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+        };
+    }
+
+    /**
+     * 更新用户资料
+     */
+    async updateProfile(userId: string, updateData: { name?: string }) {
+        const user = await this.userService.updateUser({
+            where: { id: userId },
+            data: updateData,
+        });
+
+        return {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+        };
+    }
+
+    /**
+     * 修改密码
+     */
+    async changePassword(userId: string, oldPassword: string, newPassword: string) {
+        const user = await this.userService.user({ id: userId });
+        if (!user || !user.password) {
+            throw new UnauthorizedException('User not found');
+        }
+
+        // 验证旧密码
+        const isMatch = await bcrypt.compare(oldPassword, user.password);
+        if (!isMatch) {
+            throw new UnauthorizedException('Current password is incorrect');
+        }
+
+        // 生成新密码哈希
+        const salt = await bcrypt.genSalt();
+        const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+        // 更新密码
+        await this.userService.updateUser({
+            where: { id: userId },
+            data: {
+                password: hashedPassword,
+                passwordSalt: salt,
+            },
+        });
+
+        return {
+            message: 'Password changed successfully',
+        };
+    }
 }

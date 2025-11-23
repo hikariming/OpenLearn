@@ -13,8 +13,10 @@ interface User {
 
 interface AuthContextType {
     user: User | null;
+    token: string | null;
     login: (token: string, user: User) => void;
     logout: () => void;
+    updateUser: (user: User) => void;
     isAuthenticated: boolean;
     loading: boolean;
 }
@@ -23,6 +25,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [user, setUser] = useState<User | null>(null);
+    const [token, setToken] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
     const router = useRouter();
     const pathname = usePathname();
@@ -35,24 +38,20 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     useEffect(() => {
         const initializeAuth = async () => {
-            const token = Cookies.get('token');
-            if (token) {
+            const savedToken = Cookies.get('token');
+            if (savedToken) {
                 try {
-                    // Validate token and get user profile
-                    // Note: We need an endpoint for this. For now, we'll assume if token exists, we are logged in.
-                    // Ideally: const { data } = await api.get('/auth/me'); setUser(data);
-                    // For this MVP, we might persist user in localStorage or just rely on token presence for "isAuthenticated"
-                    // and fetch user data on demand.
-                    // Let's try to decode token or fetch profile if we had the endpoint.
-                    // Since we don't have /auth/me yet, we will rely on localStorage for user info persistence for now.
-                    const storedUser = localStorage.getItem('user');
-                    if (storedUser) {
-                        setUser(JSON.parse(storedUser));
-                    }
+                    // 调用后端API验证token并获取用户信息
+                    const { data } = await api.get('/auth/me');
+                    setUser(data);
+                    setToken(savedToken);
+                    // 同步更新localStorage
+                    localStorage.setItem('user', JSON.stringify(data));
                 } catch (error) {
                     console.error('Auth initialization failed', error);
                     Cookies.remove('token');
                     localStorage.removeItem('user');
+                    setToken(null);
                 }
             }
             setLoading(false);
@@ -61,10 +60,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         initializeAuth();
     }, []);
 
-    const login = (token: string, userData: User) => {
-        Cookies.set('token', token, { expires: 7 }); // 7 days
+    const login = (newToken: string, userData: User) => {
+        Cookies.set('token', newToken, { expires: 7 }); // 7 days
         localStorage.setItem('user', JSON.stringify(userData));
         setUser(userData);
+        setToken(newToken);
         const locale = getLocaleFromPath();
         router.push(`/${locale}/dashboard`);
     };
@@ -73,16 +73,24 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         Cookies.remove('token');
         localStorage.removeItem('user');
         setUser(null);
+        setToken(null);
         const locale = getLocaleFromPath();
         router.push(`/${locale}/login`);
+    };
+
+    const updateUser = (userData: User) => {
+        setUser(userData);
+        localStorage.setItem('user', JSON.stringify(userData));
     };
 
     return (
         <AuthContext.Provider
             value={{
                 user,
+                token,
                 login,
                 logout,
+                updateUser,
                 isAuthenticated: !!user,
                 loading,
             }}

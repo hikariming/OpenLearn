@@ -44,5 +44,29 @@
             "learnAnything": "学习任何东西"
         },
         "greeting": "与人工智能辅导员一起学习"
+    },
+    "UserMenu": {
+        "personalSettings": "个人设置",
+        "switchLanguage": "切换语言",
+        "logout": "注销系统",
+        "chinese": "中文",
+        "english": "English",
+        "japanese": "日本語"
+    },
+    "Settings": {
+        "title": "设置",
+        "personalInfo": "个人信息",
+        "changePassword": "修改密码",
+        "name": "姓名",
+        "email": "邮箱",
+        "currentPassword": "当前密码",
+        "newPassword": "新密码",
+        "confirmPassword": "确认密码",
+        "save": "保存更改",
+        "cancel": "取消",
+        "updateSuccess": "更新成功",
+        "updateError": "更新失败",
+        "passwordMismatch": "密码不匹配",
+        "passwordTooShort": "密码至少需要6个字符"
     }
 }

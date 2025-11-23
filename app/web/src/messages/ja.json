@@ -44,5 +44,29 @@
             "learnAnything": "何でも学ぶ"
         },
         "greeting": "AIチューターと一緒に学ぶ"
+    },
+    "UserMenu": {
+        "personalSettings": "個人設定",
+        "switchLanguage": "言語切替",
+        "logout": "ログアウト",
+        "chinese": "中文",
+        "english": "English",
+        "japanese": "日本語"
+    },
+    "Settings": {
+        "title": "設定",
+        "personalInfo": "個人情報",
+        "changePassword": "パスワード変更",
+        "name": "名前",
+        "email": "メール",
+        "currentPassword": "現在のパスワード",
+        "newPassword": "新しいパスワード",
+        "confirmPassword": "パスワード確認",
+        "save": "変更を保存",
+        "cancel": "キャンセル",
+        "updateSuccess": "更新成功",
+        "updateError": "更新失敗",
+        "passwordMismatch": "パスワードが一致しません",
+        "passwordTooShort": "パスワードは6文字以上必要です"
     }
 }

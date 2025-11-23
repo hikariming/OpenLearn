@@ -1,112 +1,256 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from '../src/app.module';
-import { AuthService } from '../src/modules/auth/auth.service';
-import { UserService } from '../src/modules/user/user.service';
-import { TenantService } from '../src/modules/tenant/tenant.service';
-import { AuthModule } from '../src/modules/auth/auth.module';
-import { UserModule } from '../src/modules/user/user.module';
-import { TenantModule } from '../src/modules/tenant/tenant.module';
+#!/usr/bin/env ts-node
 
-async function bootstrap() {
-    const app = await NestFactory.createApplicationContext(AppModule);
+/**
+ * 手动测试脚本
+ * 用于快速测试租户管理 API 的核心功能
+ * 
+ * 运行方式：
+ * cd app/server
+ * npm run test:manual
+ */
 
-    // Select modules to get services
-    const authService = app.select(AuthModule).get(AuthService);
-    const userService = app.select(UserModule).get(UserService);
-    const tenantService = app.select(TenantModule).get(TenantService);
+import axios from 'axios';
 
-    const email = `fulltest-${Date.now()}@example.com`;
-    const password = 'password123';
-    const name = 'Full Test User';
+const API_BASE_URL = 'http://localhost:3001';
+let authToken = '';
+let userId = '';
+let tenantId = '';
+let secondTenantId = '';
 
-    console.log('--- Starting Full Flow Test ---');
+// 颜色输出
+const colors = {
+    reset: '\x1b[0m',
+    green: '\x1b[32m',
+    red: '\x1b[31m',
+    yellow: '\x1b[33m',
+    blue: '\x1b[34m',
+};
+
+function log(message: string, color: string = colors.reset) {
+    console.log(`${color}${message}${colors.reset}`);
+}
+
+function success(message: string) {
+    log(`✅ ${message}`, colors.green);
+}
+
+function error(message: string) {
+    log(`❌ ${message}`, colors.red);
+}
+
+function info(message: string) {
+    log(`ℹ️  ${message}`, colors.blue);
+}
+
+async function sleep(ms: number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+/**
+ * 测试 1: 用户注册
+ */
+async function testRegister() {
+    info('测试 1: 用户注册并自动创建租户');
 
     try {
-        // 1. Register
-        console.log(`\n1. Registering user: ${email}`);
-        const registerResult = await authService.register({ email, password, name });
-        console.log('   > Register Success. User ID:', registerResult.user.id);
-        console.log('   > Default Tenant ID:', registerResult.tenant.id);
-
-        const userId = registerResult.user.id;
-        const defaultTenantId = registerResult.tenant.id;
-
-        // 2. Login
-        console.log('\n2. Logging in...');
-        const loginResult = await authService.login({
-            email,
-            password: 'password123',
+        const response = await axios.post(`${API_BASE_URL}/auth/register`, {
+            email: `test-${Date.now()}@example.com`,
+            name: '测试用户',
+            password: 'Password123!',
         });
-        console.log('   > Login Success. User:', loginResult.user.email);
-        console.log('   > Token:', loginResult.token ? 'Generated ✅' : 'Missing ❌');
-        if (loginResult.token) {
-            console.log('   > Token Preview:', loginResult.token.substring(0, 20) + '...');
-        }
 
-        // 3. Create Second Tenant
-        console.log('\n3. Creating Second Tenant...');
-        const secondTenant = await tenantService.createTenant({
-            name: 'Second Workspace',
-            plan: 'pro',
-            status: 'normal',
-            owner: { connect: { id: userId } },
-        });
-        console.log('   > Second Tenant Created. ID:', secondTenant.id);
+        authToken = response.data.token;
+        userId = response.data.user.id;
+        tenantId = response.data.tenant.id;
 
-        // Link user to second tenant
-        await tenantService.addMember({
-            user: { connect: { id: userId } },
-            tenant: { connect: { id: secondTenant.id } },
-            role: 'owner',
-            current: false
-        });
-        console.log('   > User added to Second Tenant.');
+        success(`注册成功！用户 ID: ${userId}`);
+        success(`自动创建租户: ${response.data.tenant.name} (${tenantId})`);
 
-        // 4. Switch Tenant
-        console.log('\n4. Switching to Second Tenant...');
-        await tenantService.switchTenant(userId, secondTenant.id);
-
-        const memberAfterSwitch = await tenantService.getMember(secondTenant.id, userId);
-        console.log('   > Switch Success. Is Current?', memberAfterSwitch?.current);
-
-        if (!memberAfterSwitch?.current) {
-            throw new Error('Tenant switch failed!');
-        }
-
-        // 5. Delete User
-        console.log('\n5. Deleting User...');
-        // Note: In a real app, we might want to cascade delete tenants or handle cleanup.
-        // For now, we just delete the user. Prisma might complain about foreign keys if not configured to cascade.
-        // Let's check if we can delete.
-
-        // To delete user, we first need to delete memberships because of foreign key constraints if not set to Cascade in Prisma (default is usually Restrict or Cascade depending on relation).
-        // Let's try deleting user directly. If it fails, we know we need to handle relations.
-        // Actually, let's clean up properly for the test.
-
-        console.log('   > Cleaning up memberships...');
-        // We don't have deleteMember in service, so we rely on Prisma cascade or manual delete via prisma service if we had access.
-        // Since we only have UserService, let's try deleteUser.
-        // If schema relations didn't specify onDelete: Cascade, this might fail.
-        // Looking at schema:
-        // user User @relation(fields: [userId], references: [id]) -> No onDelete specified, defaults to Restrict usually? Or Prisma default?
-        // Actually Prisma default for 1-n is usually SetNull or Restrict?
-        // Let's try.
-
-        try {
-            await userService.deleteUser({ id: userId });
-            console.log('   > User Deleted Successfully.');
-        } catch (e) {
-            console.log('   > Delete User failed (expected if no cascade):', e.message.split('\n')[0]);
-            console.log('   > *Test Note*: Deletion might require cascading delete configuration in Schema.');
-        }
-
-    } catch (error) {
-        console.error('\n!!! Test Failed !!!');
-        console.error(error);
-    } finally {
-        await app.close();
-        console.log('\n--- Test Finished ---');
+        return true;
+    } catch (err: any) {
+        error(`注册失败: ${err.response?.data?.message || err.message}`);
+        return false;
     }
 }
 
-bootstrap();
+/**
+ * 测试 2: 获取用户的所有租户
+ */
+async function testGetTenants() {
+    info('测试 2: 获取用户的所有租户');
+
+    try {
+        const response = await axios.get(`${API_BASE_URL}/tenants`, {
+            headers: { Authorization: `Bearer ${authToken}` },
+        });
+
+        success(`获取到 ${response.data.length} 个租户`);
+        response.data.forEach((tenant: any) => {
+            console.log(`  - ${tenant.name} (${tenant.role}) ${tenant.current ? '✓ 当前' : ''}`);
+        });
+
+        return true;
+    } catch (err: any) {
+        error(`获取租户失败: ${err.response?.data?.message || err.message}`);
+        return false;
+    }
+}
+
+/**
+ * 测试 3: 创建新租户
+ */
+async function testCreateTenant() {
+    info('测试 3: 创建新租户');
+
+    try {
+        const response = await axios.post(
+            `${API_BASE_URL}/tenants`,
+            { name: '我的学习空间' },
+            { headers: { Authorization: `Bearer ${authToken}` } }
+        );
+
+        secondTenantId = response.data.id;
+        success(`创建租户成功: ${response.data.name} (${secondTenantId})`);
+
+        return true;
+    } catch (err: any) {
+        error(`创建租户失败: ${err.response?.data?.message || err.message}`);
+        return false;
+    }
+}
+
+/**
+ * 测试 4: 获取当前租户
+ */
+async function testGetCurrentTenant() {
+    info('测试 4: 获取当前激活的租户');
+
+    try {
+        const response = await axios.get(`${API_BASE_URL}/tenants/current`, {
+            headers: { Authorization: `Bearer ${authToken}` },
+        });
+
+        success(`当前租户: ${response.data.name} (${response.data.id})`);
+
+        return true;
+    } catch (err: any) {
+        error(`获取当前租户失败: ${err.response?.data?.message || err.message}`);
+        return false;
+    }
+}
+
+/**
+ * 测试 5: 切换租户
+ */
+async function testSwitchTenant() {
+    info('测试 5: 切换到第一个租户');
+
+    try {
+        const response = await axios.post(
+            `${API_BASE_URL}/tenants/${tenantId}/switch`,
+            {},
+            { headers: { Authorization: `Bearer ${authToken}` } }
+        );
+
+        success(`切换成功: ${response.data.currentTenant.name}`);
+
+        return true;
+    } catch (err: any) {
+        error(`切换租户失败: ${err.response?.data?.message || err.message}`);
+        return false;
+    }
+}
+
+/**
+ * 测试 6: 获取租户成员
+ */
+async function testGetMembers() {
+    info('测试 6: 获取租户成员列表');
+
+    try {
+        const response = await axios.get(`${API_BASE_URL}/tenants/${tenantId}/members`, {
+            headers: { Authorization: `Bearer ${authToken}` },
+        });
+
+        success(`获取到 ${response.data.length} 个成员`);
+        response.data.forEach((member: any) => {
+            console.log(`  - ${member.user.name} (${member.role})`);
+        });
+
+        return true;
+    } catch (err: any) {
+        error(`获取成员失败: ${err.response?.data?.message || err.message}`);
+        return false;
+    }
+}
+
+/**
+ * 测试 7: 更新租户信息
+ */
+async function testUpdateTenant() {
+    info('测试 7: 更新租户信息');
+
+    try {
+        const response = await axios.patch(
+            `${API_BASE_URL}/tenants/${tenantId}`,
+            { name: '更新后的空间名称' },
+            { headers: { Authorization: `Bearer ${authToken}` } }
+        );
+
+        success(`更新成功: ${response.data.name}`);
+
+        return true;
+    } catch (err: any) {
+        error(`更新租户失败: ${err.response?.data?.message || err.message}`);
+        return false;
+    }
+}
+
+/**
+ * 主测试流程
+ */
+async function runTests() {
+    log('\n=================================', colors.yellow);
+    log('  租户管理 API 手动测试', colors.yellow);
+    log('=================================\n', colors.yellow);
+
+    const tests = [
+        testRegister,
+        testGetTenants,
+        testCreateTenant,
+        testGetCurrentTenant,
+        testSwitchTenant,
+        testGetMembers,
+        testUpdateTenant,
+    ];
+
+    let passed = 0;
+    let failed = 0;
+
+    for (const test of tests) {
+        const result = await test();
+        if (result) {
+            passed++;
+        } else {
+            failed++;
+        }
+        await sleep(500); // 短暂延迟，避免请求过快
+        console.log('');
+    }
+
+    log('\n=================================', colors.yellow);
+    log(`  测试完成: ${passed} 通过, ${failed} 失败`, colors.yellow);
+    log('=================================\n', colors.yellow);
+
+    if (failed === 0) {
+        success('所有测试通过！🎉');
+    } else {
+        error(`有 ${failed} 个测试失败`);
+    }
+}
+
+// 运行测试
+runTests().catch((err) => {
+    error(`测试运行失败: ${err.message}`);
+    process.exit(1);
+});

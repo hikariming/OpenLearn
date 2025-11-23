@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -8,6 +8,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { UserModule } from './modules/user/user.module';
 import { TenantModule } from './modules/tenant/tenant.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { TenantContextMiddleware } from './common/middleware/tenant-context.middleware';
 
 @Module({
   imports: [
@@ -24,4 +25,11 @@ import { AuthModule } from './modules/auth/auth.module';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule { }
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    // 应用租户上下文中间件到所有路由
+    consumer
+      .apply(TenantContextMiddleware)
+      .forRoutes('*');
+  }
+}

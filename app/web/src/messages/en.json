@@ -44,5 +44,29 @@
             "learnAnything": "Learn anything"
         },
         "greeting": "Learn with AI Tutor"
+    },
+    "UserMenu": {
+        "personalSettings": "Personal Settings",
+        "switchLanguage": "Switch Language",
+        "logout": "Logout",
+        "chinese": "中文",
+        "english": "English",
+        "japanese": "日本語"
+    },
+    "Settings": {
+        "title": "Settings",
+        "personalInfo": "Personal Information",
+        "changePassword": "Change Password",
+        "name": "Name",
+        "email": "Email",
+        "currentPassword": "Current Password",
+        "newPassword": "New Password",
+        "confirmPassword": "Confirm Password",
+        "save": "Save Changes",
+        "cancel": "Cancel",
+        "updateSuccess": "Updated successfully",
+        "updateError": "Update failed",
+        "passwordMismatch": "Passwords do not match",
+        "passwordTooShort": "Password must be at least 6 characters"
     }
 }
