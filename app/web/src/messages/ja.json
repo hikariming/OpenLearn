@@ -67,6 +67,77 @@
         "updateSuccess": "更新成功",
         "updateError": "更新失敗",
         "passwordMismatch": "パスワードが一致しません",
-        "passwordTooShort": "パスワードは6文字以上必要です"
+        "passwordTooShort": "パスワードは6文字以上必要です",
+        "modelProvider": "モデルプロバイダー",
+        "members": "スペースメンバー"
+    },
+    "ModelProvider": {
+        "providers": "モデルプロバイダー",
+        "addProvider": "プロバイダーを追加",
+        "configure": "設定",
+        "providerType": "プロバイダータイプ",
+        "baseUrl": "ベースURL",
+        "optional": "オプション",
+        "saving": "保存中...",
+        "save": "保存",
+        "cancel": "キャンセル",
+        "loading": "読み込み中...",
+        "noProviders": "設定されたプロバイダーがありません",
+        "delete": "削除",
+        "confirmDelete": "このプロバイダーを削除してもよろしいですか？",
+        "confirmDeleteDesc": "{provider}を削除すると、関連するすべてのモデルが削除されます。この操作は元に戻せません。",
+        "defaultModels": "デフォルトモデル",
+        "selectModel": "モデルを選択",
+        "fetchError": "データの取得に失敗しました",
+        "saveSuccess": "プロバイダーが正常に保存されました",
+        "saveError": "プロバイダーの保存に失敗しました",
+        "deleteSuccess": "プロバイダーが正常に削除されました",
+        "deleteError": "プロバイダーの削除に失敗しました",
+        "settingUpdateSuccess": "デフォルトモデルが更新されました",
+        "settingUpdateError": "デフォルトモデルの更新に失敗しました",
+        "modelType": {
+            "llm": "LLM (テキスト生成)",
+            "embedding": "テキスト埋め込み",
+            "rerank": "リランク",
+            "tts": "音声合成",
+            "speech": "音声認識"
+        }
+    },
+    "TenantMembers": {
+        "title": "スペースメンバー管理",
+        "memberCount": "{count}人のメンバー",
+        "inviteMember": "メンバーを招待",
+        "user": "ユーザー",
+        "role": "役割",
+        "joinedAt": "参加日",
+        "actions": "操作",
+        "email": "メールアドレス",
+        "inviting": "送信中...",
+        "sendInvite": "招待を送信",
+        "cancel": "キャンセル",
+        "remove": "メンバーを削除",
+        "confirmRemove": "このメンバーを削除してもよろしいですか？",
+        "confirmRemoveDesc": "{name}を削除してもよろしいですか？この操作により、スペースへのアクセス権限が即座に取り消されます。",
+        "inviteSuccess": "招待を送信しました",
+        "inviteError": "招待の送信に失敗しました",
+        "removeSuccess": "メンバーを削除しました",
+        "removeError": "メンバーの削除に失敗しました",
+        "roleUpdateSuccess": "役割を更新しました",
+        "roleUpdateError": "役割の更新に失敗しました",
+        "roles": {
+            "owner": "オーナー",
+            "admin": "管理者",
+            "normal": "メンバー",
+            "adminTip": "メンバーと設定を管理できます",
+            "normalTip": "表示と使用のみ可能"
+        },
+        "removeFromTeam": "チームから削除",
+        "removeFromTeamTip": "このメンバーをスペースから削除"
+    },
+    "Common": {
+        "confirm": "確認",
+        "cancel": "キャンセル",
+        "delete": "削除",
+        "loading": "読み込み中..."
     }
 }

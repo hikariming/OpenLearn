@@ -6,6 +6,7 @@ import { X } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import api from '@/lib/api';
 import ModelProviderSettings from './settings/ModelProviderSettings';
+import TenantMembersSettings from './settings/TenantMembersSettings';
 
 interface SettingsModalProps {
     isOpen: boolean;
@@ -19,7 +20,7 @@ interface SettingsModalProps {
 export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
     const t = useTranslations('Settings');
     const { user, logout } = useAuth();
-    const [activeTab, setActiveTab] = useState<'info' | 'password' | 'modelProvider'>('info');
+    const [activeTab, setActiveTab] = useState<'info' | 'password' | 'members' | 'modelProvider'>('info');
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
@@ -134,6 +135,15 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
                             {t('changePassword')}
                         </button>
                         <button
+                            onClick={() => setActiveTab('members')}
+                            className={`w-full text-left px-4 py-3 rounded-lg transition-colors ${activeTab === 'members'
+                                ? 'bg-white text-gray-900 font-medium shadow-sm'
+                                : 'text-gray-600 hover:bg-white hover:text-gray-900'
+                                }`}
+                        >
+                            {t('members')}
+                        </button>
+                        <button
                             onClick={() => setActiveTab('modelProvider')}
                             className={`w-full text-left px-4 py-3 rounded-lg transition-colors ${activeTab === 'modelProvider'
                                 ? 'bg-white text-gray-900 font-medium shadow-sm'
@@ -146,7 +156,7 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
                 </div>
 
                 {/* 右侧内容 */}
-                <div className="flex-1 p-8 overflow-y-auto">
+                <div className="flex-1 p-8 overflow-y-auto bg-gray-50/50">
                     {message && (
                         <div
                             className={`mb-6 p-4 rounded-lg ${message.type === 'success'
@@ -270,6 +280,13 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
                                     </button>
                                 </div>
                             </form>
+                        </div>
+                    )}
+
+                    {activeTab === 'members' && (
+                        <div>
+                            <h3 className="text-2xl font-bold text-gray-900 mb-6">{t('members')}</h3>
+                            <TenantMembersSettings />
                         </div>
                     )}
 

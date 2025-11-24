@@ -38,21 +38,57 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     useEffect(() => {
         const initializeAuth = async () => {
-            const savedToken = Cookies.get('token');
-            if (savedToken) {
+            console.log('[AuthContext] Initializing auth...');
+
+            // 1. Try to restore user from localStorage first (Optimistic UI)
+            const savedUser = localStorage.getItem('user');
+            console.log('[AuthContext] savedUser from localStorage:', savedUser);
+
+            if (savedUser) {
                 try {
-                    // 调用后端API验证token并获取用户信息
-                    const { data } = await api.get('/auth/me');
-                    setUser(data);
-                    setToken(savedToken);
-                    // 同步更新localStorage
-                    localStorage.setItem('user', JSON.stringify(data));
-                } catch (error) {
-                    console.error('Auth initialization failed', error);
-                    Cookies.remove('token');
+                    const parsedUser = JSON.parse(savedUser);
+                    setUser(parsedUser);
+                    console.log('[AuthContext] Restored user from localStorage:', parsedUser);
+                } catch (e) {
+                    console.error('[AuthContext] Failed to parse user from localStorage', e);
                     localStorage.removeItem('user');
-                    setToken(null);
                 }
+            }
+
+            // 2. Check for token and validate with backend
+            const savedToken = Cookies.get('token');
+            console.log('[AuthContext] savedToken from cookies:', savedToken);
+
+            if (savedToken) {
+                setToken(savedToken); // Set token immediately so API calls work
+                try {
+                    console.log('[AuthContext] Verifying token with /auth/me...');
+                    // 调用后端API验证token并获取最新用户信息
+                    const { data } = await api.get('/auth/me');
+                    console.log('[AuthContext] /auth/me success:', data);
+                    setUser(data);
+                    // Update localStorage with fresh data
+                    localStorage.setItem('user', JSON.stringify(data));
+                } catch (error: any) {
+                    console.error('[AuthContext] Auth verification failed:', error);
+
+                    // Only clear state if it's explicitly an auth error (401)
+                    // Network errors or 500s shouldn't log the user out if we have a token
+                    if (error.response?.status === 401) {
+                        console.log('[AuthContext] 401 received, clearing state');
+                        Cookies.remove('token');
+                        localStorage.removeItem('user');
+                        setUser(null);
+                        setToken(null);
+                    } else {
+                        console.warn('[AuthContext] Non-401 error during verification, keeping local state if available');
+                    }
+                }
+            } else {
+                console.log('[AuthContext] No token found, clearing state');
+                // No token, ensure no user state
+                setUser(null);
+                localStorage.removeItem('user');
             }
             setLoading(false);
         };
@@ -61,6 +97,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }, []);
 
     const login = (newToken: string, userData: User) => {
+        console.log('[AuthContext] Login called', { newToken, userData });
         Cookies.set('token', newToken, { expires: 7 }); // 7 days
         localStorage.setItem('user', JSON.stringify(userData));
         setUser(userData);

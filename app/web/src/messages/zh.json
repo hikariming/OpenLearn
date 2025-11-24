@@ -68,11 +68,13 @@
         "updateError": "更新失败",
         "passwordMismatch": "密码不匹配",
         "passwordTooShort": "密码至少需要6个字符",
-        "modelProvider": "模型提供商"
+        "modelProvider": "模型提供商",
+        "members": "空间成员"
     },
     "ModelProvider": {
         "providers": "模型提供商",
         "addProvider": "添加提供商",
+        "configure": "配置",
         "providerType": "提供商类型",
         "baseUrl": "API 基础地址",
         "optional": "可选",
@@ -90,6 +92,8 @@
         "saveError": "保存提供商失败",
         "deleteSuccess": "提供商删除成功",
         "deleteError": "删除提供商失败",
+        "confirmDelete": "确定要删除此提供商吗?",
+        "confirmDeleteDesc": "删除 {provider} 后，您将无法使用该提供商的所有模型。此操作不可恢复。",
         "settingUpdateSuccess": "默认模型已更新",
         "settingUpdateError": "更新默认模型失败",
         "modelType": {
@@ -99,5 +103,42 @@
             "tts": "文本转语音 (TTS)",
             "speech": "语音转文本 (ASR)"
         }
+    },
+    "TenantMembers": {
+        "title": "空间成员管理",
+        "memberCount": "共 {count} 位成员",
+        "inviteMember": "邀请成员",
+        "user": "用户",
+        "role": "角色",
+        "joinedAt": "加入时间",
+        "actions": "操作",
+        "email": "邮箱地址",
+        "inviting": "发送中...",
+        "sendInvite": "发送邀请",
+        "cancel": "取消",
+        "remove": "移除成员",
+        "confirmRemove": "确定要移除该成员吗？",
+        "inviteSuccess": "邀请发送成功",
+        "inviteError": "邀请发送失败",
+        "removeSuccess": "成员移除成功",
+        "removeError": "移除成员失败",
+        "roleUpdateSuccess": "角色更新成功",
+        "roleUpdateError": "角色更新失败",
+        "roles": {
+            "owner": "所有者",
+            "admin": "管理员",
+            "normal": "普通成员",
+            "adminTip": "可以管理成员和配置",
+            "normalTip": "只能查看和使用"
+        },
+        "removeFromTeam": "移除成员",
+        "removeFromTeamTip": "将该成员从空间移除",
+        "confirmRemoveDesc": "确定要移除 {name} 吗？此操作将立即撤销该成员对空间的访问权限。"
+    },
+    "Common": {
+        "confirm": "确认",
+        "cancel": "取消",
+        "delete": "删除",
+        "loading": "加载中..."
     }
 }

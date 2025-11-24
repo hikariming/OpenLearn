@@ -30,7 +30,10 @@ api.interceptors.response.use(
             // Token expired or invalid, logout user
             Cookies.remove('token');
             if (typeof window !== 'undefined') {
-                window.location.href = '/login';
+                // Extract locale from current path (e.g. /en/dashboard -> en)
+                const pathParts = window.location.pathname.split('/');
+                const locale = ['en', 'zh', 'ja'].includes(pathParts[1]) ? pathParts[1] : 'en';
+                window.location.href = `/${locale}/login`;
             }
         }
         return Promise.reject(error);
