@@ -132,7 +132,11 @@
             "normalTip": "表示と使用のみ可能"
         },
         "removeFromTeam": "チームから削除",
-        "removeFromTeamTip": "このメンバーをスペースから削除"
+        "removeFromTeamTip": "このメンバーをスペースから削除",
+        "Common": {
+            "confirm": "確認",
+            "cancel": "キャンセル"
+        }
     },
     "Common": {
         "confirm": "確認",

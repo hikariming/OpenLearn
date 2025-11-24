@@ -84,7 +84,6 @@
         "loading": "加载中...",
         "noProviders": "暂无配置的提供商",
         "delete": "删除",
-        "confirmDelete": "确定要删除此提供商吗？",
         "defaultModels": "默认模型",
         "selectModel": "选择模型",
         "fetchError": "获取数据失败",
@@ -133,7 +132,11 @@
         },
         "removeFromTeam": "移除成员",
         "removeFromTeamTip": "将该成员从空间移除",
-        "confirmRemoveDesc": "确定要移除 {name} 吗？此操作将立即撤销该成员对空间的访问权限。"
+        "confirmRemoveDesc": "确定要移除 {name} 吗？此操作将立即撤销该成员对空间的访问权限。",
+        "Common": {
+            "confirm": "确认",
+            "cancel": "取消"
+        }
     },
     "Common": {
         "confirm": "确认",
