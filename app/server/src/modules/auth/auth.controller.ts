@@ -26,7 +26,7 @@ export class AuthController {
     @Get('me')
     @UseGuards(JwtAuthGuard)
     async getProfile(@Request() req: any) {
-        return this.authService.getProfile(req.user.userId);
+        return this.authService.getProfile(req.user.id);
     }
 
     /**
@@ -35,7 +35,7 @@ export class AuthController {
     @Patch('profile')
     @UseGuards(JwtAuthGuard)
     async updateProfile(@Request() req: any, @Body() updateProfileDto: UpdateProfileDto) {
-        return this.authService.updateProfile(req.user.userId, updateProfileDto);
+        return this.authService.updateProfile(req.user.id, updateProfileDto);
     }
 
     /**
@@ -45,6 +45,6 @@ export class AuthController {
     @UseGuards(JwtAuthGuard)
     async changePassword(@Request() req: any, @Body() changePasswordDto: ChangePasswordDto) {
         const { oldPassword, newPassword } = changePasswordDto;
-        return this.authService.changePassword(req.user.userId, oldPassword, newPassword);
+        return this.authService.changePassword(req.user.id, oldPassword, newPassword);
     }
 }
