@@ -95,12 +95,53 @@
         "deleteError": "プロバイダーの削除に失敗しました",
         "settingUpdateSuccess": "デフォルトモデルが更新されました",
         "settingUpdateError": "デフォルトモデルの更新に失敗しました",
+        "modelCatalogTitle": "モデルカタログ",
+        "modelCatalogDesc": "プロバイダーごとに同期されたモデルを有効／無効化し、必要に応じてカスタムモデルを追加できます。",
+        "modelCatalogEnabled": "有効 {count} モデル",
+        "providerDisconnected": "未接続",
+        "providerModelCount": "{enabled}/{total} 有効",
+        "modelSource": {
+            "auto": "同期済み",
+            "custom": "カスタム"
+        },
+        "toggleModel": "モデルを切り替え",
+        "modelListEmpty": "モデルがまだありません。同期するかカスタムモデルを追加してください。",
+        "connectProviderTip": "まずこのプロバイダーを接続して最新のモデルを同期してください。",
+        "addCustomModelTitle": "カスタムモデルを追加",
+        "customModelIdLabel": "モデル ID",
+        "customModelNameLabel": "表示名（任意）",
+        "customModelNamePlaceholder": "表示用の名前",
+        "customModelTypeLabel": "モデル種別",
+        "modelActions": {
+            "adding": "追加中...",
+            "addCustom": "モデルを追加"
+        },
+        "connectProviderBeforeCustom": "カスタムモデルを追加する前にプロバイダーを設定してください。",
+        "customModelAdded": "カスタムモデルを追加しました",
+        "customModelAddError": "カスタムモデルの追加に失敗しました",
+        "customModelDeleted": "カスタムモデルを削除しました",
+        "customModelDeleteError": "カスタムモデルの削除に失敗しました",
+        "modelEnabled": "モデルを有効化しました",
+        "modelDisabled": "モデルを無効化しました",
+        "modelToggleError": "モデル状態の更新に失敗しました",
+        "catalogRefreshError": "カタログの更新に失敗しました",
+        "customModelIdRequired": "モデル ID は必須です",
         "modelType": {
             "llm": "LLM (テキスト生成)",
             "embedding": "テキスト埋め込み",
             "rerank": "リランク",
             "tts": "音声合成",
             "speech": "音声認識"
+        },
+        "providerNames": {
+            "openai": "OpenAI",
+            "openrouter": "OpenRouter",
+            "gemini": "Google Gemini",
+            "siliconflow": "SiliconFlow（硅基流动）"
+        },
+        "fields": {
+            "siteUrl": "サイトURL（HTTP Referer 用）",
+            "appName": "アプリ名（X-Title 用）"
         }
     },
     "TenantMembers": {

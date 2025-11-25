@@ -95,12 +95,53 @@
         "confirmDeleteDesc": "删除 {provider} 后，您将无法使用该提供商的所有模型。此操作不可恢复。",
         "settingUpdateSuccess": "默认模型已更新",
         "settingUpdateError": "更新默认模型失败",
+        "modelCatalogTitle": "模型目录",
+        "modelCatalogDesc": "为每个提供商开启或关闭同步的模型，并按需添加自定义模型。",
+        "modelCatalogEnabled": "已启用 {count} 个模型",
+        "providerDisconnected": "未连接",
+        "providerModelCount": "启用 {enabled}/共 {total}",
+        "modelSource": {
+            "auto": "已同步",
+            "custom": "自定义"
+        },
+        "toggleModel": "切换模型",
+        "modelListEmpty": "暂无模型，可同步或添加自定义模型。",
+        "connectProviderTip": "请先连接该提供商以自动同步最新模型。",
+        "addCustomModelTitle": "添加自定义模型",
+        "customModelIdLabel": "模型 ID",
+        "customModelNameLabel": "展示名称（可选）",
+        "customModelNamePlaceholder": "用于展示的名称",
+        "customModelTypeLabel": "模型类型",
+        "modelActions": {
+            "adding": "正在添加...",
+            "addCustom": "添加模型"
+        },
+        "connectProviderBeforeCustom": "请先配置该提供商，再添加自定义模型。",
+        "customModelAdded": "自定义模型已添加",
+        "customModelAddError": "添加自定义模型失败",
+        "customModelDeleted": "自定义模型已删除",
+        "customModelDeleteError": "删除自定义模型失败",
+        "modelEnabled": "模型已启用",
+        "modelDisabled": "模型已停用",
+        "modelToggleError": "更新模型状态失败",
+        "catalogRefreshError": "刷新模型目录失败",
+        "customModelIdRequired": "模型 ID 为必填项",
         "modelType": {
             "llm": "LLM (文本生成)",
             "embedding": "文本嵌入 (Embedding)",
             "rerank": "重排序 (Rerank)",
             "tts": "文本转语音 (TTS)",
             "speech": "语音转文本 (ASR)"
+        },
+        "providerNames": {
+            "openai": "OpenAI",
+            "openrouter": "OpenRouter",
+            "gemini": "Google Gemini",
+            "siliconflow": "硅基流动"
+        },
+        "fields": {
+            "siteUrl": "站点地址（用于 HTTP Referer）",
+            "appName": "应用名称（用于 X-Title）"
         }
     },
     "TenantMembers": {

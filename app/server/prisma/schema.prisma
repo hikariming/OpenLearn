@@ -48,6 +48,7 @@ model Tenant {
   owner            User?          @relation("TenantOwner", fields: [ownerId], references: [id])
   providerConfigs  ProviderConfig[]
   modelSettings    TenantModelSetting[]
+  providerModels   TenantProviderModel[]
 
   @@map("tenants")
 }
@@ -119,4 +120,22 @@ model TenantModelSetting {
 
   @@unique([tenantId, modelType])
   @@map("tenant_model_settings")
+}
+
+model TenantProviderModel {
+  id           String   @id @default(uuid())
+  tenantId     String   @map("tenant_id")
+  provider     String
+  model        String
+  displayName  String   @map("display_name")
+  modelType    String   @map("model_type")
+  enabled      Boolean  @default(true)
+  source       String   @default("auto")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  tenant       Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, provider, model])
+  @@map("tenant_provider_models")
 }

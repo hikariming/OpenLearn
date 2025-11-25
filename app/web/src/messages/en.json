@@ -95,12 +95,53 @@
         "confirmDeleteDesc": "Deleting {provider} will remove all associated models. This action cannot be undone.",
         "settingUpdateSuccess": "Default model updated",
         "settingUpdateError": "Failed to update default model",
+        "modelCatalogTitle": "Model Catalog",
+        "modelCatalogDesc": "Enable or disable synced models per provider. Add custom entries to extend coverage.",
+        "modelCatalogEnabled": "{count} models enabled",
+        "providerDisconnected": "Disconnected",
+        "providerModelCount": "{enabled}/{total} enabled",
+        "modelSource": {
+            "auto": "Synced",
+            "custom": "Custom"
+        },
+        "toggleModel": "Toggle model",
+        "modelListEmpty": "No models yet. Sync or add one below.",
+        "connectProviderTip": "Connect this provider to sync the latest catalog automatically.",
+        "addCustomModelTitle": "Add Custom Model",
+        "customModelIdLabel": "Model ID",
+        "customModelNameLabel": "Display Name (optional)",
+        "customModelNamePlaceholder": "Friendly model name",
+        "customModelTypeLabel": "Model Type",
+        "modelActions": {
+            "adding": "Adding...",
+            "addCustom": "Add Model"
+        },
+        "connectProviderBeforeCustom": "Configure the provider first to add custom models.",
+        "customModelAdded": "Custom model added",
+        "customModelAddError": "Failed to add custom model",
+        "customModelDeleted": "Custom model removed",
+        "customModelDeleteError": "Failed to delete custom model",
+        "modelEnabled": "Model enabled",
+        "modelDisabled": "Model disabled",
+        "modelToggleError": "Failed to update model status",
+        "catalogRefreshError": "Failed to refresh catalog",
+        "customModelIdRequired": "Model ID is required",
         "modelType": {
             "llm": "LLM (Text Generation)",
             "embedding": "Text Embedding",
             "rerank": "Rerank",
             "tts": "Text to Speech",
             "speech": "Speech to Text"
+        },
+        "providerNames": {
+            "openai": "OpenAI",
+            "openrouter": "OpenRouter",
+            "gemini": "Google Gemini",
+            "siliconflow": "SiliconFlow"
+        },
+        "fields": {
+            "siteUrl": "Site URL (used for the HTTP Referer header)",
+            "appName": "App Name (used for the X-Title header)"
         }
     },
     "TenantMembers": {
