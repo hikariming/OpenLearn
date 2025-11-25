@@ -119,41 +119,46 @@ export default function TenantMembersSettings() {
     const canManage = currentUserMember?.role === 'owner' || currentUserMember?.role === 'admin';
 
     return (
-        <div className="space-y-6">
+        <div className="flex flex-col gap-6">
             {/* Header */}
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between bg-white p-6 rounded-2xl border border-gray-200/60 shadow-[0_2px_8px_-4px_rgba(0,0,0,0.05)]">
                 <div>
-                    <h3 className="text-lg font-bold text-gray-900">{t('title')}</h3>
+                    <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+                        {t('title')}
+                        <span className="px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 text-xs font-medium">
+                            {members.length}
+                        </span>
+                    </h3>
                     <p className="text-sm text-gray-500 mt-1">
-                        {t('memberCount', { count: members.length })}
+                        Manage workspace members and their roles
                     </p>
                 </div>
                 <button
                     onClick={() => setShowInviteModal(true)}
-                    className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
+                    className="flex items-center gap-2 px-5 py-2.5 bg-black text-white rounded-xl hover:bg-gray-800 transition-all shadow-sm hover:shadow text-sm font-medium"
                 >
-                    <UserPlus size={16} />
+                    <UserPlus size={18} />
                     {t('inviteMember')}
                 </button>
             </div>
 
             {message && (
-                <div className={`p-4 rounded-lg ${message.type === 'success' ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>
+                <div className={`p-4 rounded-xl border ${message.type === 'success' ? 'bg-green-50 text-green-700 border-green-200' : 'bg-red-50 text-red-700 border-red-200'}`}>
                     {message.text}
                 </div>
             )}
 
             {/* Member List */}
-            <div className="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+            <div className="bg-white border border-gray-200/60 rounded-2xl overflow-hidden shadow-[0_2px_8px_-4px_rgba(0,0,0,0.05)]">
                 <table className="w-full text-left text-sm">
-                    <thead className="bg-gray-50 border-b border-gray-200">
+                    <thead className="bg-gray-50/50 border-b border-gray-100">
                         <tr>
-                            <th className="px-6 py-3 font-medium text-gray-500">{t('user')}</th>
-                            <th className="px-6 py-3 font-medium text-gray-500">{t('role')}</th>
-                            <th className="px-6 py-3 font-medium text-gray-500">{t('joinedAt')}</th>
+                            <th className="px-6 py-4 font-semibold text-gray-500">{t('user')}</th>
+                            <th className="px-6 py-4 font-semibold text-gray-500">{t('role')}</th>
+                            <th className="px-6 py-4 font-semibold text-gray-500">{t('joinedAt')}</th>
                         </tr>
                     </thead>
-                    <tbody className="divide-y divide-gray-200">
+                    <tbody className="divide-y divide-gray-100">
                         {members.map(member => {
                             const isCurrentUser = member.userId === user?.id;
                             const isOwner = member.role === 'owner';
@@ -161,22 +166,22 @@ export default function TenantMembersSettings() {
                             const canEditRole = canManage && !isOwner && !isCurrentUser;
 
                             return (
-                                <tr key={member.id} className={`transition-colors ${isCurrentUser ? 'bg-blue-50/60' : 'hover:bg-gray-50'}`}>
+                                <tr key={member.id} className={`transition-colors group ${isCurrentUser ? 'bg-blue-50/30 hover:bg-blue-50/50' : 'hover:bg-gray-50/80'}`}>
                                     <td className="px-6 py-4">
-                                        <div className="flex items-center gap-3">
-                                            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center text-blue-700 font-bold uppercase text-xs">
+                                        <div className="flex items-center gap-4">
+                                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center text-blue-700 font-bold uppercase text-sm ring-2 ring-white shadow-sm">
                                                 {member.user.name[0]}
                                             </div>
                                             <div>
                                                 <div className="font-medium text-gray-900 flex items-center gap-2">
                                                     {member.user.name}
                                                     {isCurrentUser && (
-                                                        <span className="text-[10px] bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded-full font-medium">
+                                                        <span className="text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-bold tracking-wide">
                                                             YOU
                                                         </span>
                                                     )}
                                                 </div>
-                                                <div className="text-gray-500 text-xs">{member.user.email}</div>
+                                                <div className="text-gray-500 text-xs mt-0.5">{member.user.email}</div>
                                             </div>
                                         </div>
                                     </td>

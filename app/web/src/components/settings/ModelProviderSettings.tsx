@@ -420,20 +420,20 @@ export default function ModelProviderSettings() {
     if (loading) return <div className="p-8 text-center text-gray-500">{t('loading')}</div>;
 
     return (
-        <div className="space-y-8">
+        <div className="flex flex-col gap-6">
             {message && (
-                <div className={`p-4 rounded-lg ${message.type === 'success' ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>
+                <div className={`p-4 rounded-xl border ${message.type === 'success' ? 'bg-green-50 text-green-700 border-green-200' : 'bg-red-50 text-red-700 border-red-200'}`}>
                     {message.text}
                 </div>
             )}
 
             {/* System Model Defaults */}
-            <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
-                <h3 className="text-sm font-bold text-gray-900 mb-6 flex items-center gap-2">
-                    <Settings2 className="w-4 h-4 text-gray-500" />
+            <div className="bg-white rounded-2xl p-6 border border-gray-200/60 shadow-[0_2px_8px_-4px_rgba(0,0,0,0.05)]">
+                <h3 className="text-base font-bold text-gray-900 mb-6 flex items-center gap-2">
+                    <Settings2 className="w-5 h-5 text-gray-500" />
                     {t('defaultModels')}
                 </h3>
-                <div className="space-y-4">
+                <div className="space-y-3">
                     {modelTypes.map(type => {
                         const currentSetting = settings.find(s => s.modelType === type.id);
                         const currentModelId = currentSetting ? `${currentSetting.provider}:${currentSetting.model}` : '';
@@ -441,8 +441,8 @@ export default function ModelProviderSettings() {
                         const typeOptions = getModelOptionsForType(type.id);
 
                         return (
-                            <div key={type.id} className="flex items-center gap-4 p-3 rounded-lg hover:bg-gray-50 transition-colors border border-transparent hover:border-gray-100">
-                                <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${type.color}`}>
+                            <div key={type.id} className="flex items-center gap-4 p-4 rounded-xl hover:bg-gray-50/80 transition-colors border border-transparent hover:border-gray-100 group">
+                                <div className={`w-10 h-10 rounded-lg flex items-center justify-center transition-transform group-hover:scale-105 ${type.color}`}>
                                     <Icon size={20} />
                                 </div>
                                 <div className="flex-1">
@@ -467,8 +467,10 @@ export default function ModelProviderSettings() {
 
             {/* Provider Grid */}
             <div>
-                <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-4">{t('providers')}</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="flex items-center justify-between mb-4 px-1">
+                    <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wider">{t('providers')}</h3>
+                </div>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                     {supportedProviders.map(p => (
                         <ProviderCard
                             key={p.id}
@@ -490,7 +492,7 @@ export default function ModelProviderSettings() {
             </div>
 
             {/* Model Catalog */}
-            <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
+            <div className="bg-white rounded-2xl p-6 border border-gray-200/60 shadow-[0_2px_8px_-4px_rgba(0,0,0,0.05)]">
                 <div className="flex items-center justify-between mb-4">
                     <div>
                         <h3 className="text-sm font-bold text-gray-900 mb-1 flex items-center gap-2">
