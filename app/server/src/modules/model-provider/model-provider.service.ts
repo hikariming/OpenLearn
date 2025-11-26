@@ -384,6 +384,23 @@ export class ModelProviderService {
         });
     }
 
+    async getDecryptedConfig(tenantId: string, providerName: string) {
+        const config = await this.prisma.providerConfig.findUnique({
+            where: {
+                tenantId_provider: {
+                    tenantId,
+                    provider: providerName,
+                },
+            },
+        });
+
+        if (!config) {
+            return null;
+        }
+
+        return JSON.parse(EncryptionUtil.decrypt(config.encryptedConfig));
+    }
+
     private get providerModelClient() {
         return (this.prisma as unknown as { tenantProviderModel: any }).tenantProviderModel;
     }

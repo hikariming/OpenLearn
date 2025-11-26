@@ -10,6 +10,7 @@ import { TenantModule } from './modules/tenant/tenant.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { ModelProviderModule } from './modules/model-provider/model-provider.module';
 import { TenantContextMiddleware } from './common/middleware/tenant-context.middleware';
+import { ChatModule } from './modules/chat/chat.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { TenantContextMiddleware } from './common/middleware/tenant-context.midd
     TenantModule,
     AuthModule,
     ModelProviderModule,
+    ChatModule,
   ],
   controllers: [AppController],
   providers: [AppService],

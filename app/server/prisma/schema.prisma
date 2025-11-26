@@ -27,6 +27,7 @@ model User {
   tenants           TenantMember[]
   ownedTenants      Tenant[]       @relation("TenantOwner")
   accounts          Account[]      // SSO Accounts
+  chatSessions      ChatSession[]
 
   @@map("users")
 }
@@ -49,6 +50,10 @@ model Tenant {
   providerConfigs  ProviderConfig[]
   modelSettings    TenantModelSetting[]
   providerModels   TenantProviderModel[]
+  
+  // AI Learning Relations
+  resources        LearningResource[]
+  chatSessions     ChatSession[]
 
   @@map("tenants")
 }
@@ -138,4 +143,82 @@ model TenantProviderModel {
 
   @@unique([tenantId, provider, model])
   @@map("tenant_provider_models")
+}
+
+// --- AI Learning Platform Models ---
+
+// 1. Learning Resources
+model LearningResource {
+  id          String   @id @default(uuid())
+  tenantId    String   @map("tenant_id")
+  title       String
+  type        String   // 'pdf', 'video', 'audio', 'article'
+  url         String   // Storage URL
+  content     String?  // Extracted text / Transcript
+  summary     String?  // AI Generated summary
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  tenant      Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  chats       ChatSession[]
+  flashcards  Flashcard[]
+
+  @@map("learning_resources")
+}
+
+// 2. Chat System
+model ChatSession {
+  id          String   @id @default(uuid())
+  tenantId    String   @map("tenant_id")
+  userId      String   @map("user_id")
+  resourceId  String?  @map("resource_id") // Optional: null for "General Q&A"
+  title       String
+  
+  // Model Configuration
+  provider    String   @default("openai")
+  model       String   @default("gpt-3.5-turbo")
+
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  tenant      Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  resource    LearningResource? @relation(fields: [resourceId], references: [id])
+  messages    ChatMessage[]
+
+  @@map("chat_sessions")
+}
+
+model ChatMessage {
+  id           String   @id @default(uuid())
+  sessionId    String   @map("session_id")
+  role         String   // 'user', 'assistant', 'system'
+  content      String
+  
+  // Model used for this specific message (if different from session default)
+  usedProvider String?  @map("used_provider")
+  usedModel    String?  @map("used_model")
+
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  session      ChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@map("chat_messages")
+}
+
+// 3. Flashcards
+model Flashcard {
+  id          String   @id @default(uuid())
+  resourceId  String?  @map("resource_id")
+  front       String   // Question / Term
+  back        String   // Answer / Definition
+  status      String   // 'new', 'learning', 'mastered'
+  nextReview  DateTime? @map("next_review")
+  
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  resource    LearningResource? @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+
+  @@map("flashcards")
 }

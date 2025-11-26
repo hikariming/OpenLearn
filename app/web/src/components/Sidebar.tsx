@@ -88,6 +88,10 @@ export default function Sidebar() {
                         <Search size={20} />
                         <span>{t('search')}</span>
                     </button>
+                    <Link href="/learn/chat" className="flex items-center gap-3 text-gray-600 hover:bg-gray-50 w-full p-2 rounded-lg transition-colors">
+                        <MessageSquare size={20} />
+                        <span>AI 对话</span>
+                    </Link>
                     <button className="flex items-center gap-3 text-gray-600 hover:bg-gray-50 w-full p-2 rounded-lg transition-colors">
                         <Clock size={20} />
                         <span>{t('history')}</span>
