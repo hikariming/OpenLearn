@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useChat } from 'ai/useChat';
+import { useChat } from '@ai-sdk/react';
 import { Send, Square } from 'lucide-react';
 import ModelSelector from './ModelSelector';
 import MessageList from './MessageList';
